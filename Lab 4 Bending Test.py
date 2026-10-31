@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 L = 3.50    # span
 w = 0.500   # width
-t = 0.185   # thick
+t = 0.185   # thick 
 
 files = {"Al 6063": "EJD_RVH_6063_1_10262026_162802.csv",
          "Al 2024": "EJD_RVH_2024_1_10262026_163157.csv"}
