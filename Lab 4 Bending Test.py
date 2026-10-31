@@ -3,7 +3,8 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-
+import os
+os.chdir(os.path.dirname(os.path.abspath(__file__))) #files in same folder
 
 L = 3.50    # span
 w = 0.500   # width
@@ -54,10 +55,38 @@ for name in files:
 
     print(name, "E_B =", round(E_B), "psi, sigma_p =", round(sigma_p), "psi, sigma_M =", round(sigma_M), "psi")
 
-    # Plot
-    plt.plot(strain, stress / 1000, label=name)
+    # Figure 1: load vs deflection
+    plt.figure(1)
+    curve1, = plt.plot(deflection, load, label=name)
+    plt.plot(deflection[load.idxmax()], P_max, "o", color=curve1.get_color())   # peak load
 
+    # Figure 2: stress vs strain
+    plt.figure(2)
+    curve2, = plt.plot(strain, stress / 1000, label=name)
+    color = curve2.get_color()                         # same color for this alloy
+
+    e = np.linspace(0.002, eps_p * 1.3, 20)            # strain values for the offset line
+    plt.plot(e, E_B * (e - 0.002) / 1000, "--", color=color, label=name + " 0.2% offset")
+
+    plt.plot(eps_p, sigma_p / 1000, "s", color=color)  # square = proof strength
+    plt.plot(eps_M, sigma_M / 1000, "o", color=color)  # circle = max flexural stress
+
+plt.figure(1)
+plt.xlabel("Midspan deflection (in)")
+plt.ylabel("Load (lbf)")
+plt.xlim(0, 1.1)
+plt.ylim(0, 400)
+plt.grid(True)
+plt.legend()
+plt.savefig("figure1.png", dpi=200)
+
+plt.figure(2)
 plt.xlabel("Flexural strain (in/in)")
 plt.ylabel("Flexural stress (ksi)")
+plt.xlim(0, 0.10)
+plt.ylim(0, 120)
+plt.grid(True)
 plt.legend()
+plt.savefig("figure2.png", dpi=200)
+
 plt.show()
